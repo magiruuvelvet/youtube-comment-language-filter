@@ -51,7 +51,7 @@ function showAllComments() {
 
 function removeComments() {
   if (CLFSelect.value == 'All') {
-    CLFFooter.textContent = 'All comments'
+    CLFFooter.textContent = 'すべてのコメント'
   } else if (CLFSelect.value == 'English') {
     onlyShow([65, 97], [90, 122])
   } else if (CLFSelect.value == 'Korean') {
@@ -63,6 +63,30 @@ function removeComments() {
   }
 }
 
+function languageChangeCallback() {
+    if (CLFSelect.value == 'All') {
+        CLFFooter.textContent = 'すべてのコメント'
+        observer.disconnect()
+        showAllComments()
+    } else {
+        const config = {
+            attributes: false,
+            childList: true,
+            subtree: true,
+        }
+        const target = document.evaluate(
+            '/html/body/ytd-app/div/ytd-page-manager/ytd-watch-flexy/div[4]/div[1]/div/ytd-comments/ytd-item-section-renderer/div[3]',
+            document,
+            null,
+            XPathResult.FIRST_ORDERED_NODE_TYPE,
+            null
+        ).singleNodeValue
+        showAllComments()
+        removeComments()
+        observer.observe(target, config)
+    }
+}
+
 async function main(loc) {
   if (loc.substring(0, 29) == 'https://www.youtube.com/watch') {
     if (!CLFShown) {
@@ -71,30 +95,30 @@ async function main(loc) {
         (result) => {
           var AllSelect = document.createElement('option')
           AllSelect.value = 'All'
-          AllSelect.innerHTML = 'Any character'
+          AllSelect.innerHTML = 'すべての言語'
           CLFSelect.appendChild(AllSelect)
           if (!result.EnglishDisabled) {
             var EnglishSelect = document.createElement('option')
             EnglishSelect.value = 'English'
-            EnglishSelect.innerHTML = 'Alphabets'
+            EnglishSelect.innerHTML = 'ローマ字'
             CLFSelect.appendChild(EnglishSelect)
           }
           if (!result.KoreanDisabled) {
             var KoreanSelect = document.createElement('option')
             KoreanSelect.value = 'Korean'
-            KoreanSelect.innerHTML = 'Korean characters (한글)'
+            KoreanSelect.innerHTML = '韓国語'
             CLFSelect.appendChild(KoreanSelect)
           }
           if (!result.JapaneseDisabled) {
             var JapaneseSelect = document.createElement('option')
             JapaneseSelect.value = 'Japanese'
-            JapaneseSelect.innerHTML = 'Japanese characters (仮名)'
+            JapaneseSelect.innerHTML = '日本語'
             CLFSelect.appendChild(JapaneseSelect)
           }
           if (!result.ChineseDisabled) {
             var ChineseSelect = document.createElement('option')
             ChineseSelect.value = 'Chinese'
-            ChineseSelect.innerHTML = 'Chinese characters (漢字)'
+            ChineseSelect.innerHTML = '中国語'
             CLFSelect.appendChild(ChineseSelect)
           }
         }
@@ -102,8 +126,8 @@ async function main(loc) {
       CLFHeader.classList.add('select-text')
       CLFHeader.classList.add('CLFHeader')
       CLFFooter.classList.add('CLFFooter')
-      CLFHeader.textContent = 'Comments must include:'
-      CLFFooter.textContent = 'All comments'
+      CLFHeader.textContent = 'コメント言語を選択'
+      CLFFooter.textContent = 'すべてのコメント'
       ;(function insertEl() {
         var meta = document.evaluate(
           '/html/body/ytd-app/div/ytd-page-manager/ytd-watch-flexy/div[4]/div[1]/div/div[6]',
@@ -133,29 +157,7 @@ async function main(loc) {
           setTimeout(insertEl, 200)
         }
       })()
-      CLFSelect.addEventListener('change', function () {
-        if (CLFSelect.value == 'All') {
-          CLFFooter.textContent = 'All comments'
-          observer.disconnect()
-          showAllComments()
-        } else {
-          const config = {
-            attributes: false,
-            childList: true,
-            subtree: true,
-          }
-          const target = document.evaluate(
-            '/html/body/ytd-app/div/ytd-page-manager/ytd-watch-flexy/div[4]/div[1]/div/ytd-comments/ytd-item-section-renderer/div[3]',
-            document,
-            null,
-            XPathResult.FIRST_ORDERED_NODE_TYPE,
-            null
-          ).singleNodeValue
-          showAllComments()
-          removeComments()
-          observer.observe(target, config)
-        }
-      })
+      CLFSelect.addEventListener('change', languageChangeCallback)
     }
     showAllComments()
     removeComments()
@@ -166,7 +168,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.message === 'page moved!') {
     loc = request.url
     main(loc)
-    CLFFooter.textContent = 'All comments'
+    CLFFooter.textContent = 'すべてのコメント'
     document.getElementById('CLFSelect').selectedIndex = 0
     showAllComments()
     observer.disconnect()

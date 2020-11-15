@@ -10,15 +10,15 @@ function storeSetting() {
   const KoreanDisabled = !document.getElementById('lang-korean-checkbox').checked
   const JapaneseDisabled = !document.getElementById('lang-japanese-checkbox').checked
   const ChineseDisabled = !document.getElementById('lang-chinese-checkbox').checked
-  const debugModeEnabled = document.getElementById('debug-checkbox').checked
-  const updateNotificationDisabled = !document.getElementById('update-noti-checkbox').checked
+  const debugModeEnabled = false
+  const updateNotificationDisabled = true
   const setting = {
     EnglishDisabled: EnglishDisabled,
     KoreanDisabled: KoreanDisabled,
     JapaneseDisabled: JapaneseDisabled,
     ChineseDisabled: ChineseDisabled,
-    debugModeEnabled: debugModeEnabled,
-    updateNotificationDisabled: updateNotificationDisabled,
+    debugModeEnabled: false,
+    updateNotificationDisabled: true,
   }
   console.log(setting)
   chrome.storage.sync.set(setting, () => {
@@ -45,8 +45,6 @@ function checkSetting() {
       document.getElementById('lang-korean-checkbox').checked = !result.KoreanDisabled
       document.getElementById('lang-japanese-checkbox').checked = !result.JapaneseDisabled
       document.getElementById('lang-chinese-checkbox').checked = !result.ChineseDisabled
-      document.getElementById('debug-checkbox').checked = result.debugModeEnabled
-      document.getElementById('update-noti-checkbox').checked = !result.updateNotificationDisabled
     }
   )
 }
