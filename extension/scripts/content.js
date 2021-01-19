@@ -75,7 +75,7 @@ function languageChangeCallback() {
             subtree: true,
         }
         const target = document.evaluate(
-            '/html/body/ytd-app/div/ytd-page-manager/ytd-watch-flexy/div[4]/div[1]/div/ytd-comments/ytd-item-section-renderer/div[3]',
+            '/html/body/ytd-app/div/ytd-page-manager/ytd-watch-flexy/div[5]/div[1]/div/ytd-comments/ytd-item-section-renderer/div[3]',
             document,
             null,
             XPathResult.FIRST_ORDERED_NODE_TYPE,
@@ -130,14 +130,14 @@ async function main(loc) {
       CLFFooter.textContent = 'すべてのコメント'
       ;(function insertEl() {
         var meta = document.evaluate(
-          '/html/body/ytd-app/div/ytd-page-manager/ytd-watch-flexy/div[4]/div[1]/div/div[6]',
+          '/html/body/ytd-app/div/ytd-page-manager/ytd-watch-flexy/div[5]/div[1]/div/div[6]',
           document,
           null,
           XPathResult.FIRST_ORDERED_NODE_TYPE,
           null
         ).singleNodeValue
         var primary = document.evaluate(
-          '/html/body/ytd-app/div/ytd-page-manager/ytd-watch-flexy/div[4]/div[1]',
+          '/html/body/ytd-app/div/ytd-page-manager/ytd-watch-flexy/div[5]/div[1]',
           document,
           null,
           XPathResult.FIRST_ORDERED_NODE_TYPE,
